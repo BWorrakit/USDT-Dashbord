@@ -76,6 +76,7 @@ export default function App() {
           tx.value && tx.tokenDecimal
             ? Number(tx.value) / 10 ** Number(tx.tokenDecimal)
             : Number(tx.value || 0),
+            gasUsed: Number(tx.gasUsed || 0), //
         time: new Date(Number(tx.timeStamp) * 1000).toLocaleString(),
         timestamp: Number(tx.timeStamp) * 1000,
       }));
@@ -292,6 +293,12 @@ export default function App() {
               maximumFractionDigits: 2,
             })} USDT`}
           />
+          <Card
+          title="Total Gas Used"
+          value={filteredTxs
+          .reduce((sum, tx) => sum + Number(tx.gasUsed || 0), 0)
+          .toLocaleString()}
+          />
           <Card title="Page Size" value={PAGE_SIZE} />
         </div>
 
@@ -368,7 +375,7 @@ export default function App() {
 
               <Table
                 rows={pagedTxs}
-                columns={["no", "time", "hash", "from", "to", "tokenSymbol", "value"]}
+                columns={["no", "time", "hash", "from", "to", "tokenSymbol", "value", "gasUsed"]}
                 page={page}
                 pageSize={PAGE_SIZE}
               />
