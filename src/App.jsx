@@ -368,7 +368,9 @@ export default function App() {
 
               <Table
                 rows={pagedTxs}
-                columns={["time", "hash", "from", "to", "tokenSymbol", "value"]}
+                columns={["no", "time", "hash", "from", "to", "tokenSymbol", "value"]}
+                page={page}
+                pageSize={PAGE_SIZE}
               />
 
               <div style={styles.paginationLeft}>
@@ -431,7 +433,7 @@ function Button({ children, disabled, onClick }) {
   );
 }
 
-function Table({ rows, columns }) {
+function Table({ rows, columns, page, pageSize }) {
   return (
     <div style={styles.tableWrap}>
       <table style={styles.table}>
@@ -459,24 +461,26 @@ function Table({ rows, columns }) {
             >
               {columns.map((c) => (
                 <td style={styles.td} key={c}>
-                  {c === "hash" ? (
-                    <a
-                      style={styles.link}
-                      href={`${EXPLORER}/tx/${row[c]}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {short(row[c])}
-                    </a>
-                  ) : c === "from" || c === "to" ? (
-                    <span style={styles.mono}>{short(row[c])}</span>
-                  ) : c === "value" ? (
+                  {c === "no" ? (
+                  (page - 1) * pageSize + i + 1
+                    ) : c === "hash" ? (
+  <a
+    style={styles.link}
+    href={`${EXPLORER}/tx/${row[c]}`}
+    target="_blank"
+    rel="noreferrer"
+  >
+    {short(row[c])}
+  </a>
+                    ) : c === "from" || c === "to" ? (
+                   <span style={styles.mono}>{short(row[c])}</span>
+                    ) : c === "value" ? (
                     Number(row[c]).toLocaleString(undefined, {
-                      maximumFractionDigits: 6,
+                    maximumFractionDigits: 6,
                     })
-                  ) : (
+                    ) : (
                     String(row[c] ?? "-")
-                  )}
+                    )}
                 </td>
               ))}
             </tr>
